@@ -14,7 +14,6 @@ const Donate = () => {
     }
     setLoading(true)
     try {
-      // Step 1 - Create order from backend
       const res = await fetch(`${API_BASE}/api/donate/create-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -28,7 +27,6 @@ const Donate = () => {
         return
       }
 
-      // Step 2 - Open Razorpay checkout
       const options = {
         key: data.key,
         amount: data.order.amount,
@@ -37,7 +35,6 @@ const Donate = () => {
         description: 'Donation',
         order_id: data.order.id,
         handler: async (response) => {
-          // Step 3 - Verify payment
           const verifyRes = await fetch(`${API_BASE}/api/donate/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -61,6 +58,7 @@ const Donate = () => {
       const rzp = new window.Razorpay(options)
       rzp.open()
     } catch (err) {
+      console.error(err)
       alert('Something went wrong. Please try again.')
     }
     setLoading(false)
@@ -68,8 +66,6 @@ const Donate = () => {
 
   return (
     <main style={{ paddingTop: '80px' }}>
-
-      {/* Banner */}
       <section style={{
         background: 'linear-gradient(135deg, #7c2d00, #c2410c)',
         padding: '80px 24px', textAlign: 'center', color: 'white',
@@ -81,7 +77,6 @@ const Donate = () => {
         </p>
       </section>
 
-      {/* Donation Form */}
       <section style={{ padding: '80px 24px', background: '#fff7ed' }}>
         <div style={{
           maxWidth: '560px', margin: '0 auto',
@@ -97,7 +92,6 @@ const Donate = () => {
             Secure payment powered by Razorpay
           </p>
 
-          {/* Quick amount selector */}
           <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#57534e', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>
             Select Amount
           </p>
@@ -107,8 +101,7 @@ const Donate = () => {
                 key={amt}
                 onClick={() => setForm({ ...form, amount: amt })}
                 style={{
-                  padding: '10px 20px',
-                  borderRadius: '999px',
+                  padding: '10px 20px', borderRadius: '999px',
                   border: `2px solid ${form.amount === amt ? '#f97316' : '#e7e5e4'}`,
                   background: form.amount === amt ? '#fff7ed' : '#ffffff',
                   color: form.amount === amt ? '#ea580c' : '#57534e',
@@ -120,7 +113,6 @@ const Donate = () => {
             ))}
           </div>
 
-          {/* Form fields */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <input
               type="number"
@@ -128,10 +120,7 @@ const Donate = () => {
               placeholder="Custom amount (₹)"
               value={form.amount}
               onChange={handleChange}
-              style={{
-                padding: '14px 18px', borderRadius: '12px',
-                border: '1.5px solid #e7e5e4', fontSize: '0.95rem', outline: 'none',
-              }}
+              style={{ padding: '14px 18px', borderRadius: '12px', border: '1.5px solid #e7e5e4', fontSize: '0.95rem', outline: 'none' }}
             />
             {[
               { name: 'name', placeholder: 'Full Name', type: 'text' },
@@ -145,10 +134,7 @@ const Donate = () => {
                 placeholder={field.placeholder}
                 value={form[field.name]}
                 onChange={handleChange}
-                style={{
-                  padding: '14px 18px', borderRadius: '12px',
-                  border: '1.5px solid #e7e5e4', fontSize: '0.95rem', outline: 'none',
-                }}
+                style={{ padding: '14px 18px', borderRadius: '12px', border: '1.5px solid #e7e5e4', fontSize: '0.95rem', outline: 'none' }}
               />
             ))}
 
@@ -161,8 +147,7 @@ const Donate = () => {
                 color: 'white', fontWeight: '900',
                 borderRadius: '12px', border: 'none',
                 fontSize: '1rem', cursor: loading ? 'not-allowed' : 'pointer',
-                letterSpacing: '1px', textTransform: 'uppercase',
-                marginTop: '8px',
+                letterSpacing: '1px', textTransform: 'uppercase', marginTop: '8px',
               }}
             >
               {loading ? 'Processing...' : `Donate ₹${form.amount}`}
