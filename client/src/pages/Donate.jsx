@@ -55,6 +55,12 @@ const Donate = () => {
         theme: { color: '#f97316' },
       }
 
+      if (!window.Razorpay) {
+        alert('Razorpay SDK failed to load. Are you offline or using an adblocker?')
+        setLoading(false)
+        return
+      }
+
       const rzp = new window.Razorpay(options)
       rzp.open()
     } catch (err) {

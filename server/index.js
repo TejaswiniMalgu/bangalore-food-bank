@@ -5,12 +5,7 @@ require('dotenv').config()
 
 const app = express()
 
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://bangalore-food-bank-e1wpw6jta-tejaswini-s-projects2.vercel.app'
-  ]
-}))
+app.use(cors())
 
 app.use(express.json())
 
