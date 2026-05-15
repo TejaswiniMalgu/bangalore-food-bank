@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import API_BASE from '../config'
 
 const Donate = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', amount: 500 })
@@ -14,7 +15,7 @@ const Donate = () => {
     setLoading(true)
     try {
       // Step 1 - Create order from backend
-      const res = await fetch('http://localhost:5000/api/donate/create-order', {
+      const res = await fetch(`${API_BASE}/api/donate/create-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -37,7 +38,7 @@ const Donate = () => {
         order_id: data.order.id,
         handler: async (response) => {
           // Step 3 - Verify payment
-          const verifyRes = await fetch('http://localhost:5000/api/donate/verify', {
+          const verifyRes = await fetch(`${API_BASE}/api/donate/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(response),
